@@ -1,4 +1,4 @@
-import cv2 as cv
+import cv2
 import numpy as np
 import pandas as pd
 
@@ -84,23 +84,23 @@ def get_rep_vect(bp, n):
     img[img < 175] = 0
     masa = img[img > 175].size
     if masa > 0:
-        moments = cv.moments(img)
-        hu_moments = np.array(cv.HuMoments(moments)).flatten()[0:4]
+        moments = cv2.moments(img)
+        hu_moments = np.array(cv2.HuMoments(moments)).flatten()[0:4]
         tr_moments = np.sign(-hu_moments)*np.log(abs(hu_moments))
         centroid = get_centroid(moments)
-        contours, hierarchy = cv.findContours(img, cv.RETR_TREE, cv.CHAIN_APPROX_NONE)
-        contour = max(contours, key=cv.contourArea)
-        hull = cv.convexHull(contour)
+        contours, hierarchy = cv2.findContours(img, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+        contour = max(contours, key=cv2.contourArea)
+        hull = cv2.convexHull(contour)
         ellipticity = get_ellipticity(tr_moments[0], tr_moments[1])
         inclination = get_inclination(moments["nu20"], moments["nu02"])
         orientation = get_orientation(moments["mu20"], moments["mu11"], moments["mu02"])
         eccentricity = get_eccentricity(moments["m00"], moments["mu20"], moments["mu11"], moments["mu02"])
         centrality = moments["nu12"], moments["nu21"]
         skewness = moments["nu30"], moments["nu03"]
-        contour_area = cv.contourArea(contour)
-        hull_area = cv.contourArea(hull)
-        perimetro_hull = cv.arcLength(hull, True)
-        perimetro = cv.arcLength(contour, True)
+        contour_area = cv2.contourArea(contour)
+        hull_area = cv2.contourArea(hull)
+        perimetro_hull = cv2.arcLength(hull, True)
+        perimetro = cv2.arcLength(contour, True)
         circularity = get_circularity(contour_area, hull_area, perimetro, perimetro_hull)
         otros = [masa, hull.size, contour_area, contour_area/masa, hull_area/masa,
                  perimetro/masa, perimetro_hull/masa, contour_area/hull_area,
@@ -202,7 +202,7 @@ def performance_per_cell(df_bp):
 
 def solve():
     filename = 'some_image.jpg'
-    img = ~cv.imread(filename, 0)
+    img = ~cv2.imread(filename, 0)
     bp = img_to_bp(img)
     df, X, y = get_X_y(bp, n_pca=0, n_select=1, alpha_lasso=0, n_lasso=0, transform=True)
     df_bp = performance_models(df, n_dt=1)
