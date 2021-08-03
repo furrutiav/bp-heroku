@@ -40,8 +40,10 @@ def get():
 def post():
     some_json = request.get_json()
     my_string = some_json["image"]
+    selection = some_json["selection"]
+    n_attributes = some_json["n_attributes"]
     base64_to_img(my_string)
-    performance = solve()
+    performance = solve(selection, n_attributes)
     return {"TEST": performance}, 201
 
 

@@ -200,12 +200,15 @@ def performance_per_cell(df_bp):
     return pd.DataFrame(dict_cols)
 
 
-def solve():
+def solve(selection=0, n_attributes=1):
     filename = 'some_image.jpg'
     img = ~cv2.imread(filename, 0)
     bp = img_to_bp(img)
-    df, X, y = get_X_y(bp, n_pca=0, n_select=1, alpha_lasso=0, n_lasso=0, transform=True)
-    df_bp = performance_models(df, n_dt=1)
+    if selection == 0:
+         df, X, y = get_X_y(bp, n_pca=0, n_select=n_attributes, alpha_lasso=0, n_lasso=0, transform=True)
+    else:
+        df, X, y = get_X_y(bp, n_pca=0, n_select=0, alpha_lasso=0, n_lasso=n_attributes, transform=True)
+    df_bp = performance_models(df, n_dt=max(1, n_attributes))
     output = {}
     output["models"] = df_bp.mean().to_dict()
     output["solution"] = list(df.columns)[:-1]
