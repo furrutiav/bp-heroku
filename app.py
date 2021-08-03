@@ -39,7 +39,7 @@ def get():
 @app.route('/', methods=['POST'])
 def post():
     some_json = request.get_json()
-    my_string = some_json["test"]
+    my_string = some_json["image"]
     base64_to_img(my_string)
     performance = solve()
     return {"TEST": performance}, 201
