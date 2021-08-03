@@ -207,7 +207,7 @@ def solve(selection=0, n_attributes=1):
     if selection == 0:
          df, X, y = get_X_y(bp, n_pca=0, n_select=n_attributes, alpha_lasso=0, n_lasso=0, transform=True)
     else:
-        df, X, y = get_X_y(bp, n_pca=0, n_select=0, alpha_lasso=0, n_lasso=n_attributes, transform=True)
+        df, X, y = get_X_y(bp, n_pca=0, n_select=0, alpha_lasso=0.1, n_lasso=n_attributes, transform=True)
     df_bp = performance_models(df, n_dt=max(1, n_attributes))
     output = {}
     output["models"] = df_bp.mean().to_dict()
