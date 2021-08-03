@@ -201,7 +201,7 @@ def performance_per_cell(df_bp):
 
 
 def solve():
-    filename = '..\API\some_image.jpg'
+    filename = 'some_image.jpg'
     img = ~cv.imread(filename, 0)
     bp = img_to_bp(img)
     df, X, y = get_X_y(bp, n_pca=0, n_select=1, alpha_lasso=0, n_lasso=0, transform=True)
