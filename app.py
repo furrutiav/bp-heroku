@@ -10,11 +10,23 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 # api = Api(app)
 
 
+def isBase64(my_string):
+    try:
+        return base64.b64encode(base64.b64decode(my_string)).decode("utf-8") == my_string
+    except Exception:
+        return False
+
+
 def base64_to_img(my_string):
-    my_img = base64.b64decode(my_string)
-    filename = 'some_image.jpg'
-    with open(filename, 'wb') as f:
-        f.write(my_img)
+    check = isBase64(my_string)
+    if check:
+        my_img = base64.b64decode(my_string)
+        filename = 'some_image.jpg'
+        with open(filename, 'wb') as f:
+            f.write(my_img)
+        return True
+    else:
+        return False
 
 
 # class Base(Resource):
@@ -33,7 +45,7 @@ def base64_to_img(my_string):
 
 @app.route('/', methods=['GET'])
 def get():
-    return {"About": "Hello world!"}
+    return {"About": "https://github.com/furrutiav/bp-heroku"}
 
 
 @app.route('/', methods=['POST'])
@@ -42,9 +54,12 @@ def post():
     my_string = some_json["image"]
     selection = some_json["selection"]
     n_attributes = some_json["n_attributes"]
-    base64_to_img(my_string)
-    performance = solve(selection, n_attributes)
-    return {"TEST": performance}, 201
+    check = base64_to_img(my_string)
+    if check:
+        performance = solve(selection, n_attributes)
+        return {"TEST": performance}, 201
+    else:
+        return {}, 404
 
 
 if __name__ == "__main__":
