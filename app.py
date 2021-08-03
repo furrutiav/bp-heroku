@@ -1,5 +1,5 @@
 from flask import Flask, request
-from flask_restful import Resource, Api
+# from flask_restful import Resource, Api
 # from flask_cors import CORS
 import base64
 
@@ -31,8 +31,13 @@ def base64_to_img(my_string):
 
 # api.add_resource(Base, "/")
 
+@app.route('/', methods=['GET'])
+def get():
+    return {"About": "Hello world!"}
+
+
 @app.route('/', methods=['POST'])
-def output():
+def post():
     some_json = request.get_json()
     my_string = some_json["test"]
     base64_to_img(my_string)
