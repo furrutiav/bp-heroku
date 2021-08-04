@@ -10,17 +10,24 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 # api = Api(app)
 
 
-def isBase64(my_string):
+def get_extension(my_img):
+    if b"GIF" in my_img:
+        return "GIF"
+
+
+def checkBase64(my_string):
     try:
-        return base64.b64encode(base64.b64decode(my_string)).decode("utf-8") == my_string
+        my_img = base64.b64decode(my_string)
+        check = base64.b64encode(my_img).decode("utf-8") == my_string
+        extension = get_extension(my_img)
+        return my_img, check, extension
     except Exception:
-        return False
+        return False, None, None
 
 
 def base64_to_img(my_string):
-    check = isBase64(my_string)
+    my_img, check, extension = checkBase64(my_string)
     if check:
-        my_img = base64.b64decode(my_string)
         filename = 'some_image.jpg'
         with open(filename, 'wb') as f:
             f.write(my_img)

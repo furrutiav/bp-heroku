@@ -112,8 +112,16 @@ def get_rep_vect(bp, n):
         return [0 for _ in range(len(columns_))]
 
 
+def fillna_mean(X):
+    col_mean = np.nanmean(X, axis=0)
+    ixs = np.where(np.isnan(X))
+    X[ixs] = np.take(col_mean, ixs[1])
+    return X
+
+
 def get_X_y(bp_id, n_pca=0, n_select=0, alpha_lasso=0, n_lasso=1, transform=True):
-    X = [get_rep_vect(bp_id, n) for n in range(12)]
+    X = np.array([get_rep_vect(bp_id, n) for n in range(12)])
+    X = fillna_mean(X)
     y = np.arange(12) < 6
     if transform:
         scaler = RobustScaler()
