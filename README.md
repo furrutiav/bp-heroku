@@ -1,2 +1,2 @@
 # bp-heroku
-https://bp-solver.herokuapp.com/
+API: https://bp-solver.herokuapp.com/
