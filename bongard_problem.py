@@ -138,3 +138,22 @@ class BongardProblem:
         final_cols = ["num_comp", "max_1_iter",
                       "max_2_iter", "max_3_iter"] + columns_
         return pd.DataFrame(rep_dic, columns=final_cols)
+
+
+if __name__ == "__main__":
+    # Test solve-bp
+    filename = "someimage.jpg"
+    selection = 0
+    n_att = 1
+    bp = BongardProblem(filename)
+    from solver import BPSolver
+    if selection == 0:
+        s = BPSolver(bp, n_select=n_att, alpha_lasso=0, n_lasso=0)
+    else:
+        s = BPSolver(bp, n_select=0, alpha_lasso=0.1, n_lasso=n_att)
+    s.default_solve()
+    score = s.solved_pd().to_dict()["Score"]
+    keys = [key.split("(")[0] for key in score.keys()]
+    values = list(score.values())
+    output = {keys[i]: v for i, v in enumerate(values)}
+    output["solution"] = list(s.columns)

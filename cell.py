@@ -29,7 +29,7 @@ class Cell:
 
     def __repr__(self):
         id, n = self.id.split('_')
-        return f"{self.__class__.__name__}(bp_id={bp_id}, n={n_cell})"
+        return f"{self.__class__.__name__}(bp_id={id}, n={n})"
 
     def show(self):
         """

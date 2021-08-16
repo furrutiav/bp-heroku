@@ -3,7 +3,8 @@ from flask import Flask, request
 from flask_cors import CORS
 import base64
 
-from models import solve
+from bongard_problem import BongardProblem
+from solver import BPSolver
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
@@ -28,7 +29,7 @@ def checkBase64(my_string):
 def base64_to_img(my_string):
     my_img, check, extension = checkBase64(my_string)
     if check:
-        filename = 'some_image.jpg'
+        filename = 'someimage.jpg'
         with open(filename, 'wb') as f:
             f.write(my_img)
         return True
@@ -60,11 +61,22 @@ def post():
     some_json = request.get_json()
     my_string = some_json["image"]
     selection = some_json["selection"]
-    n_attributes = some_json["n_attributes"]
+    n_attributes = some_json["n_att"]
     check = base64_to_img(my_string)
     if check:
-        performance = solve(selection, n_attributes)
-        return {"TEST": performance}, 201
+        filename = "someimage.jpg"
+        bp = BongardProblem(filename)
+        if selection == 0:
+            s = BPSolver(bp, n_select=n_attributes, alpha_lasso=0, n_lasso=0)
+        else:
+            s = BPSolver(bp, n_select=0, alpha_lasso=0.1, n_lasso=n_attributes)
+        s.default_solve()
+        score = s.solved_pd().to_dict()["Score"]
+        keys = [key.split("(")[0] for key in score.keys()]
+        values = list(score.values())
+        output = {keys[i]: v for i, v in enumerate(values)}
+        output["solution"] = list(s.columns)
+        return {"solved": output}, 201
     else:
         return {}, 404
 

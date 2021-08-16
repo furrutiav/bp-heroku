@@ -16,6 +16,7 @@ COLUMNS = ["area contorno", "area envoltura convexa", "perimetro contorno",
            "centralidad x", "centralidad y", "skewness x", "skewness y", "H1", "H2",
            "H3", "H4"]
 
+
 def handle_zero_division(default):
     def wrapper(f):
         def inner(*a):

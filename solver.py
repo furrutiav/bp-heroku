@@ -49,6 +49,7 @@ class BPSolver:
         self.first = first
         self.scale = scale
         self.atts = []
+        self.columns = []
 
     @property
     def raw_X(self):
@@ -77,6 +78,7 @@ class BPSolver:
                          for i in n_best if abs(lasso.coef_[i]) > 0]
             X.drop([col for col in X.columns if col not in self.atts],
                    axis=1, inplace=True)
+        self.columns = X.columns
         return X.replace(np.nan, 0)
 
     def solve(self, clf, n_jobs=6):
