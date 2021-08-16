@@ -7,8 +7,7 @@ from itertools import product
 
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib.patches import Patch
+
 from sklearn.preprocessing import RobustScaler
 from sklearn.feature_selection import SelectKBest, f_classif
 from sklearn.model_selection import cross_val_score

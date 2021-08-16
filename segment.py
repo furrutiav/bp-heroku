@@ -2,8 +2,6 @@
 Implementa las propiedades de un segmento.
 """
 
-from functools import cached_property
-
 import cv2
 import matplotlib.pyplot as plt
 import numpy as np
